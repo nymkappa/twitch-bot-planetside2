@@ -33,8 +33,8 @@ class Events {
             return;
         }
         this.logger.log('delayedMessage', message);
-        // setTimeout(this.client.say.bind(this.client, this.config.credentials.channels[0], message),
-        //     this.config.daybreakMessageDelay);
+        setTimeout(this.client.say.bind(this.client, this.config.credentials.channels[0], message),
+            this.config.daybreakMessageDelay);
     }
 
     /**
