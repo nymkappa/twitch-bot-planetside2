@@ -281,7 +281,7 @@ class Commands {
 			if (bFull) {
                 line = '[' + name + '] [BR' + rank + '] [Next:' + next + '%] [Certs:' + certs + '] [' + hours + 'h]';
 			} else {
-				line += '[' + charInfo.name.first + ' BR' + charInfo.battle_rank.value + ']';
+				line += '[' + charInfo.name.first + ' BR' + rank + ']';
             }
 
             if (i + 1 < list.length) {
