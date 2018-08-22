@@ -66,7 +66,7 @@ class Events {
 
         // --- Infiltrator kill
         if (dead && (loadout == 1 || loadout == 8 || loadout == 15)) {
-            this.delayedMessage('!infl');
+            this.delayedMessage('!infils +');
         }
 
         // --- Kill streak step
