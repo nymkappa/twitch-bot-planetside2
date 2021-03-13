@@ -10,8 +10,8 @@ var request = require('request');
  */
 class Commands {
 	/**
-     * 
-     * @param {Logger} logger 
+     *
+     * @param {Logger} logger
      * @param {Config} config
      * @param {Tmi} tmi clients
      */
@@ -43,8 +43,8 @@ class Commands {
      * !character [name_of_the_character]
 	 *
 	 * @param {*} target
-	 * @param {*} context 
-	 * @param {*} param 
+	 * @param {*} context
+	 * @param {*} param
 	 */
 	character(target, context, param) {
 		// ----- Check the command
@@ -86,7 +86,7 @@ class Commands {
      * !list
 	 *
 	 * @param {*} target
-	 * @param {*} context 
+	 * @param {*} context
 	 */
 	list(target, context) {
 		this.logger.log('[COMMANDS] !list');
@@ -188,7 +188,7 @@ class Commands {
 		this.say("@Braoin, I'm waiting for you... KappaPride");
 	}
 
-		/**
+    /**
 	 * Look for the first currently logged in character
 	 * !current
 	 *
@@ -241,6 +241,82 @@ class Commands {
 		});
 	}
 
+
+    /**
+	 * Print currently played server
+	 * !server
+	 *
+	 * @param {*} target
+	 * @param {*} context
+	 */
+     server(target, context) {
+		this.logger.log('[COMMANDS] !server');
+
+		// ----- Generate character id list
+		var list = '';
+		for (var i = 0; i < this.config.ids.length; ++i) {
+			list += this.config.ids[i];
+			if (i + 1 < this.config.ids.length) {
+				list += ',';
+			}
+		}
+
+		// ----- Make the daybreak api call
+		var that = this;
+		var url = 'http://census.daybreakgames.com/s:jorisvial/get/ps2:v2/character/?character_id=' + list
+			+ "&c:join=characters_online_status&c:resolve=world";
+
+		var r = request(url, function(error, response, body) {
+			// ----- Something went wrong
+			if (error) {
+				return that.custom_error('[COMMANDS][ERROR] !server returned ' + error);
+			}
+
+			// ----- Parse the response
+			var obj = JSON.parse(body);
+			if (!obj.character_list || obj.character_list.length <= 0) {
+				return that.custom_error('Cannot parse daybreak response');
+			}
+
+			// ----- Look for the first online character
+			for (var i = 0; i < obj.character_list.length; ++i) {
+				var charInfo = obj.character_list[i];
+				if (!charInfo.character_id_join_characters_online_status) {
+					return that.custom_error("Daybreak online_status service is offline");
+				}
+				if (parseInt(charInfo.character_id_join_characters_online_status.online_status) !== 0) {
+                    return that.world(charInfo.world_id);
+				}
+			}
+
+			that.custom_error("Didn't find any character online (yet)");
+		});
+	}
+
+    world(worldId) {
+		// ----- Make the daybreak api call
+		var that = this;
+		var url =
+			'https://census.daybreakgames.com/s:jorisvial/get/ps2:v2/world/?world_id=' +
+			worldId
+			;
+
+		var r = request(url, function(error, response, body) {
+			// ----- Something went wrong
+			if (error) {
+				return that.custom_error('[COMMANDS][ERROR] !server is unable to fetch the server name. ' + error);
+			}
+
+			// ----- Format and send the response
+            var obj = JSON.parse(body);
+			if (!obj.world_list || obj.world_list.length <= 0) {
+				return that.custom_error('Cannot parse daybreak response');
+			}
+            that.say("Currently playing on " + obj.world_list[0].name.en);
+		});
+	}
+
+
 	/**
 	 * Bot call himself allowing user to see the command execute
 	 */
@@ -287,7 +363,7 @@ class Commands {
             if (i + 1 < list.length) {
                 line += ' - ';
             }
-            
+
             response += line;
 		}
 

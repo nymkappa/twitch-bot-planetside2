@@ -1,1 +1,1 @@
-npm install jquery tmi.js websocket
+npm install jquery tmi.js websocket request

@@ -32,7 +32,7 @@ class Config {
         // sending daybreak event related message in the chat
         // You want to tweak this according to your stream delay
         // so viewers don't get spoiled
-        this.daybreakMessageDelay = 5000;
+        this.daybreakMessageDelay = 6000;
  
         // ---- Here you can add all you daybreak character ids
         // you want to track

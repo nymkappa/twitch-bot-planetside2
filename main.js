@@ -72,6 +72,8 @@ function onMessageHandler(target, context, msg, self) {
         commands.current(target, context);
 	} else if (command === 'sexbot') {
         commands.sexbot(target, context);
+	} else if (command === 'server') {
+       commands.server(target, context);
 	} else {
         commands.unknown(command);
     }

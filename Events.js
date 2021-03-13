@@ -80,7 +80,7 @@ class Events {
             this.delayedMessage('15 Kills in a row! DBstyle');
         }
         else if (this.killStreak == 20) {
-            this.delayedMessage('20 Kills in a row! DarkMode GOWKratos BlessRNG UnSane DatSheffy');
+            this.delayedMessage('20 Kills in a row! DarkMode GivePLZ UnSane DatSheffy');
         }
         else if (this.killStreak == 25) {
             this.delayedMessage('25 Kills in a row... Not counting anymore FailFish');
